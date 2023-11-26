@@ -8,6 +8,7 @@ input/HyperFoods/
 input/KitcheNette/
 input/paths/
 input/*.pickle
+input/wine-pairing/
 
 # output files
 output/*.html

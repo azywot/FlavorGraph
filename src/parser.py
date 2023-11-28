@@ -4,14 +4,17 @@ def parameter_parser():
     """
     A method to parse up command line parameters.
     """
-    parser = argparse.ArgumentParser(description="FlavorNet2.0")
+    # parser = argparse.ArgumentParser(description="FlavorNet2.0")
+    parser = argparse.ArgumentParser(description="FlavorNet2.0 (wine-pairing)")
 
     # Input-Output
     parser.add_argument('--input_nodes',
-                        default="./input/nodes_191120.csv",
+                        default="./input/wine-pairing/nodes_with_wine.csv",
+                        # default="./input/nodes_191120.csv",
                         type=str, help="input_file")
     parser.add_argument('--input_edges',
-                        default="./input/edges_191120.csv",
+                        default="./input/wine-pairing/edges_with_wine.csv",
+                        # default="./input/edges_191120.csv",
                         type=str, help="input_file")
     parser.add_argument('--input_path',
                         default="./input/paths/",
@@ -21,7 +24,7 @@ def parameter_parser():
                         type=str, help="output_path")
 
     # Skip-Gram
-    parser.add_argument('--idx_embed', default="FlavorGraph+CSL", type=str)
+    parser.add_argument('--idx_embed', default="FlavorGraph+CSP", type=str)
     parser.add_argument('--dim', default=300, type=int, help="embedding dimensions")
     parser.add_argument('--window_size', default=3, type=int, help="context window size")
     parser.add_argument('--iterations', default=10, type=int, help="iterations")
@@ -40,9 +43,11 @@ def parameter_parser():
     parser.add_argument('--walk_length', default=50, type=int, help="length of walk")
     
     # Metapath2vec - MetapathWalker
-    parser.add_argument('--idx_metapath', default="M11", type=str)
-    # combination of metapaths? # TODO: add metapath combination
-    parser.add_argument('--which_metapath', default="CHC+CHNHC+NHCHN", type=str)
+    # parser.add_argument('--idx_metapath', default="M11", type=str)
+    parser.add_argument('--idx_metapath', default="WP", type=str) # WP as wine-pairing
+    # combination of metapaths
+    # parser.add_argument('--which_metapath', default="CHC+CHNHC+NHCHN", type=str)
+    parser.add_argument('--which_metapath', default="CHC+CHNHC+NHCHN+WHW+WHNHW+CHWHC+NHWHN", type=str)
     # how many repeated 'walks' per node
     parser.add_argument('--num_walks', default=100, type=int, help="number of walks")
     # metapath how long? (e.g., HC_CH+CHNH+NHCH * len_metapath)

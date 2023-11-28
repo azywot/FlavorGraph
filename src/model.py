@@ -22,6 +22,9 @@ def load_augmentive_features(nodes):
     binary_mask = []
 
     for row_idx in range(len(nodes)):
+        if int(nodes[row_idx]) not in binary_dict:
+            print("Missing ID: ", int(nodes[row_idx]))
+            continue
         binary_vector = binary_dict[int(nodes[row_idx])]
         try:
             binary_vector = list(binary_vector)

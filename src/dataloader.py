@@ -23,6 +23,7 @@ class DataReader:
         self.initTableNegatives()
         self.initTableDiscards()
 
+# TODO: it takes node2fp_revised_1120.pickle here, so no info about wine while using CSP; see: github
     def read_words(self, min_count):
         word_frequency = dict()
         for line in open(self.inputFileName, encoding="ISO-8859-1"):

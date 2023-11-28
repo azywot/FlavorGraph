@@ -155,6 +155,7 @@ def load_TSNE(ingr2vec, dim=2):
     X = []
     for x in ingr2vec:
         X.append(ingr2vec[x])
+    X = np.array(X)
     tsne = TSNE(n_components=dim)
     X_tsne = tsne.fit_transform(X)
 

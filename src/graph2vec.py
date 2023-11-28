@@ -20,27 +20,30 @@ class Metapath2Vec:
         walker = MetaPathWalker(args, graph)
 
         files = os.listdir(args.input_path)
+        generated_filename = "{}{}-metapath_{}-whichmeta_{}-num_walks_{}-len_metapath.txt".format(args.input_path, args.idx_metapath, args.which_metapath, args.num_walks, args.len_metapath)
         is_file = False
+
         for file in files:
             fullFilename = os.path.join(args.input_path, file)
             # if file exists, load the file.
-            if file.startswith(args.idx_metapath):
+            if os.path.exists(generated_filename):
                 is_file = True
                 print("\n !!! Found the file that you have specified...")
-                self.inputFileName = "{}{}-metapath_{}-whichmeta_{}-num_walks_{}-len_metapath.txt".format(args.input_path, args.idx_metapath, args.which_metapath, args.num_walks, args.len_metapath)
+                self.inputFileName = generated_filename
                 print("### Metapaths Loaded...", self.inputFileName)
 
         # if file does not exists, create the new one.
         if not is_file:
             print("\n !!! There is no metapaths with the given parameters...")
+            print(f" - no file: {generated_filename} found")
             print("### Creating new Metapaths...")
             self.metapaths = walker.generate_metapaths(args)
             walker.create_metapath_walks(args, args.num_walks, self.metapaths)
-            self.inputFileName = "{}{}-metapath_{}-whichmeta_{}-num_walks_{}-len_metapath.txt".format(args.input_path, args.idx_metapath, args.which_metapath, args.num_walks, args.len_metapath)
+            self.inputFileName = generated_filename
             print("### Metapaths Loaded...", self.inputFileName)
 
         # 2. read data
-        print("\n\n##########################################################################")
+        print("\n\n" + "#" * 40)
         print("### Metapaths to DataLoader...", self.inputFileName)
         self.data = DataReader(args.min_count, args.care_type, self.inputFileName)
 
@@ -62,11 +65,11 @@ class Metapath2Vec:
         self.aux_coef = args.CSP_coef
 
         if args.CSP_train:
-            print("\n\n#####################################")
+            print("\n\n" + "#" * 40)
             print("### SkipGram with CSP")
             self.skip_gram_model = SkipGramModelAux(self.emb_size, self.emb_dimension, nodes=self.data.id2word, aux_coef=self.aux_coef, CSP_save=args.CSP_save)
         else:
-            print("\n\n#####################################")
+            print("\n\n" + "#" * 40)
             print("### SkipGram Normal")
             self.skip_gram_model = SkipGramModel(self.emb_size, self.emb_dimension)
 
@@ -98,10 +101,10 @@ class Metapath2Vec:
                     pos_v = sample_batched[1].to(self.device)
                     neg_v = sample_batched[2].to(self.device)
 
-                    scheduler.step()
+                    # scheduler.step()
                     optimizer.zero_grad()
                     if self.aux_mode:
-                        aux_scheduler.step()
+                        # aux_scheduler.step()
                         aux_optimizer.zero_grad()
 
                     loss = self.skip_gram_model.forward(pos_u, pos_v, neg_v)
@@ -109,6 +112,8 @@ class Metapath2Vec:
                     optimizer.step()
                     if self.aux_mode:
                         aux_optimizer.step()
+                        aux_scheduler.step()
+                    scheduler.step()
                     running_loss = running_loss * 0.9 + loss.item() * 0.1
 
                     #if i > 0 and i % int(len(self.dataloader)/3) == 0:
@@ -166,11 +171,11 @@ class Node2Vec:
                     pos_v = sample_batched[1].to(self.device)
                     neg_v = sample_batched[2].to(self.device)
 
-                    scheduler.step()
                     optimizer.zero_grad()
                     loss = self.skip_gram_model.forward(pos_u, pos_v, neg_v)
                     loss.backward()
                     optimizer.step()
+                    scheduler.step()
                     running_loss = running_loss * 0.9 + loss.item() * 0.1
             print(" Loss: " + str(running_loss))
             self.skip_gram_model.save_embedding(self.data.id2word, self.output_file_name)

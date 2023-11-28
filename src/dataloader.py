@@ -119,8 +119,8 @@ class DatasetLoader(Dataset):
 
     @staticmethod
     def collate(batches):
-        all_u = [u for batch in batches for u, _, _ in batch if len(batch) > 0]
-        all_v = [v for batch in batches for _, v, _ in batch if len(batch) > 0]
-        all_neg_v = [neg_v for batch in batches for _, _, neg_v in batch if len(batch) > 0]
+        all_u = np.array([u for batch in batches for u, _, _ in batch if len(batch) > 0])
+        all_v = np.array([v for batch in batches for _, v, _ in batch if len(batch) > 0])
+        all_neg_v = np.array([neg_v for batch in batches for _, _, neg_v in batch if len(batch) > 0])
 
         return torch.LongTensor(all_u), torch.LongTensor(all_v), torch.LongTensor(all_neg_v)

@@ -29,7 +29,7 @@ def parameter_parser():
     parser.add_argument('--care_type', default=0, type=int, help="if 1, heterogeneous negative sampling, else normal negative sampling")
     parser.add_argument('--initial_lr', default=0.0025, type=float, help="learning rate")
     parser.add_argument('--min_count', default=5, type=int, help="min count")
-    parser.add_argument('--num_workers', default=16, type=int, help="number of workers")
+    parser.add_argument('--num_workers', default=0, type=int, help="number of workers")
 
     # Graph2vec - common
     
@@ -41,7 +41,7 @@ def parameter_parser():
     
     # Metapath2vec - MetapathWalker
     parser.add_argument('--idx_metapath', default="M11", type=str)
-    # combination of metapaths?
+    # combination of metapaths? # TODO: add metapath combination
     parser.add_argument('--which_metapath', default="CHC+CHNHC+NHCHN", type=str)
     # how many repeated 'walks' per node
     parser.add_argument('--num_walks', default=100, type=int, help="number of walks")

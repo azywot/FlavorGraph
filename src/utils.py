@@ -11,7 +11,7 @@ def graph_reader(input_nodes, input_edges):
     :param path: Path to the edge list.
     :return graph: NetworkX object returned.
     """
-    print("\n\n##########################################################################")
+    print("\n\n" + "#" * 40)
     print("### Creating Graphs...")
     graph = nx.Graph()
     graph_ingr_only = nx.Graph()
@@ -31,7 +31,7 @@ def graph_reader(input_nodes, input_edges):
         id_1, id_2, score, edge_type = row.values.tolist()
         graph.add_edge(id_1, id_2, weight=score, type=edge_type)
         if edge_type == 'ingr-ingr':
-            graph_ingr_only.add_edge(id_1, id_2, weight=score, type=edge_type)
+            graph_ingr_only.add_edge(id_1, id_2, weight=score, type=edge_type) # TODO: figure out the importance of the weights
 
     #graph.remove_edges_from(graph.selfloop_edges())
     #graph_ingr_only.remove_edges_from(graph.selfloop_edges())
@@ -95,7 +95,7 @@ def evaluate(args, graph):
 
 
     nmis = []
-    train_ratios = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    train_ratios = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99]
     for ratio in train_ratios:
         nmi = train(X, y, ratio)
         print(nmi)
@@ -122,7 +122,7 @@ def evaluate(args, graph):
                 X.append(vec)
                 y.append(category)
 
-        train_ratios = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+        train_ratios = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99]
         nmis = []
         for ratio in train_ratios:
             nmi = train(X, y, ratio)

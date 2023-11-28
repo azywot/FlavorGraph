@@ -34,7 +34,8 @@ def load_augmentive_features(nodes):
     binary_mask = np.array(binary_mask).astype(float)
     augmentive_matrix = np.array(augmentive_matrix).astype(float)
     vector_length = augmentive_matrix.shape[1]
-    return torch.tensor(augmentive_matrix, requires_grad=False).float().to("cuda"), vector_length, torch.tensor(binary_mask, requires_grad=False).float().to("cuda")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    return torch.tensor(augmentive_matrix, requires_grad=False).float().to(device), vector_length, torch.tensor(binary_mask, requires_grad=False).float().to(device)
 
 class SkipGramModel(nn.Module):
     def __init__(self, emb_size, emb_dimension):
@@ -91,6 +92,8 @@ class SkipGramModel(nn.Module):
 class SkipGramModelAux(SkipGramModel):
     def __init__(self, emb_size, emb_dimension, nodes=None, aux_coef=0.0001, CSP_save=False):
         super(SkipGramModelAux, self).__init__(emb_size, emb_dimension)
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.to(self.device)
         self.emb_size = emb_size                # row / # of vocab size / 8298
         self.emb_dimension = emb_dimension      # column / user-defined vector dimension / 128
         self.aux_coef = aux_coef

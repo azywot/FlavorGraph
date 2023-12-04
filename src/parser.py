@@ -27,7 +27,7 @@ def parameter_parser():
     parser.add_argument('--idx_embed', default="FlavorGraph+CSP", type=str)
     parser.add_argument('--dim', default=300, type=int, help="embedding dimensions")
     parser.add_argument('--window_size', default=3, type=int, help="context window size")
-    parser.add_argument('--iterations', default=10, type=int, help="iterations")
+    parser.add_argument('--iterations', default=20, type=int, help="iterations")
     parser.add_argument('--batch_size', default=128, type=int, help="batch size")
     parser.add_argument('--care_type', default=0, type=int, help="if 1, heterogeneous negative sampling, else normal negative sampling")
     parser.add_argument('--initial_lr', default=0.0025, type=float, help="learning rate")
